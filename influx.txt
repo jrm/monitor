@@ -1,0 +1,4 @@
+DROP CONTINUOUS QUERY electrical_power ON "measurements"
+DROP CONTINUOUS QUERY heat_power ON "measurements"
+CREATE CONTINUOUS QUERY electrical_power ON "measurements" RESAMPLE EVERY 1m FOR 1h BEGIN SELECT integral(value, 1h) * 0.240 AS electrical INTO "measurements".autogen.combined_power FROM "measurements".autogen.amps GROUP BY time(1h) fill(0) END
+CREATE CONTINUOUS QUERY heat_power ON "measurements" RESAMPLE EVERY 1m FOR 1d BEGIN SELECT sum(value) AS heat INTO "measurements".autogen.combined_power FROM "measurements".autogen.heat GROUP BY time(1h) fill(0) END
